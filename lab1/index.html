@@ -1,0 +1,40 @@
+<!doctype html5>
+<html>
+	<head>
+		<title>Sitter</title>
+		<link rel="stylesheet" type="text/css" href="stylesheets/screen.css" />
+		<script type="text/javascript" src="scripts/jquery-1.8.0.min.js"></script>
+		<script type="text/javascript" src="scripts/sitter.jquery.js"></script>
+	</head>
+	<body>
+		<div id="header">
+			<span class="title">Sitter</span>
+		</div>
+		<div id="container">
+			<div id="compose_area">
+				<textarea rows="1" cols="47" class="placeholder" name="message">Say something...</textarea>
+				<div id="compose_controls">
+					<input type="submit" name="send" value="Send" />
+
+					<span class="character_count">140</span>
+				</div>
+
+				<div id="flash" class="notice">
+				</div>
+			</div>
+
+			<div id="messages">
+				<div class="message unread">
+					This is just like Twitter, but simpler.<br />
+					<div class="timestamp">
+						28-08-2012 at 19:21:53
+					</div>
+
+					<div class="notice">
+						Click to mark as read.
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
