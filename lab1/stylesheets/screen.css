@@ -68,6 +68,7 @@ textarea[name="message"]:focus {
 
 	box-shadow: inset 0px 1px 1px #ff806d;
 	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ff715b), to(#ff5741));
+	background: -moz-linear-gradient(top, #ff715b, #ff5741);
 
 	color: #ffffff;
 	font-weight: bold;
@@ -77,6 +78,7 @@ textarea[name="message"]:focus {
 
 #compose_controls > input[name=send]:active {
 	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ff5741), to(#ff715b));
+	background: -moz-linear-gradient(top, #ff5741, #ff715b);
 }
 
 #compose_controls > .character_count {
@@ -143,6 +145,16 @@ textarea[name="message"]:focus {
 	}
 }
 
+@-moz-keyframes pulsate {
+	0% {
+		background-color: #ffffff;
+	}
+
+	100% {
+		background-color: #fff7b7;
+	}
+}
+
 .message.unread {
 	border-bottom: 1px dashed #ff5741;
 	-webkit-animation-name: pulsate;
@@ -150,6 +162,11 @@ textarea[name="message"]:focus {
 	-webkit-animation-iteration-count: infinite;
 	-webkit-animation-direction: alternate;
 	-webkit-animation-timing-function: ease-in-out;
+	-moz-animation-name: pulsate;
+	-moz-animation-duration: 1s;
+	-moz-animation-iteration-count: infinite;
+	-moz-animation-direction: alternate;
+	-moz-animation-timing-function: ease-in-out;
 	cursor: pointer;
 }
 
