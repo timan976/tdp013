@@ -9,7 +9,6 @@ db.open(function(err, db) {
 	}
 });
 
-var utils = require('./utils');
 var url = require('url');
 
 function index(req, res) {
@@ -59,7 +58,9 @@ function flag_message(req, res) {
 	msg_id = new mongo.BSONPure.ObjectID(msg_id);
 	db.collection("message", function(e, c) {
 		c.update({_id: msg_id}, {$set: {read: true}}, function(find_err, msg_doc) {
-			if(find_err || msg_doc == undefined) {
+			if(find_err) {
+				console.log(find_err);
+				console.log(msg_doc);
 				res.writeHead(500, {'Content-Type': 'text/html'});
 				res.write("500 Internal Server Error");
 			} else {
