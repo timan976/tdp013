@@ -35,10 +35,17 @@ function flash(message, type, duration) {
 	}
 }
 
-function add_message(message) {
+function add_message_element(message, id, read) {
+	if(read == undefined) read = false;
+
 	var message_elm = $(document.createElement("div"));
-	message_elm.addClass("message unread");
+	message_elm.addClass("message");
+	if(!read)
+		message_elm.addClass("unread");
 	message_elm.html(message + "<br />");
+	// Store the message id in a custom data attribute.
+	// See http://www.w3.org/TR/html5/global-attributes.html#embedding-custom-non-visible-data-with-the-data-attributes.
+	message_elm.attr("data-message-id", id);
 
 	var date = new Date();
 	var components = [
@@ -87,9 +94,16 @@ function post_message() {
 		return;
 	}
 
-	add_message(message);
-
-	flash("Message posted!", FLASH_SUCCESS, 2.0);
+	// Send the message to the server
+	$.getJSON('http://localhost:8888/save', {'message': message}, function(data) {
+		add_message_element(message, data._id);
+		flash("Message posted!", FLASH_SUCCESS, 2.0);
+	}).error(function(data) {
+		if(data.state() == "rejected")
+			flash("Unable to connect to server.", FLASH_ERROR, 2.0);
+		else
+			flash("Unable to save message.", FLASH_ERROR, 2.0);
+	});
 
 	textarea_elm.val("");
 	textarea_elm.attr("rows", 1);
@@ -97,10 +111,23 @@ function post_message() {
 	textarea_elm.blur();
 }
 
-$(document).ready(function() {
-	$.get('http://localhost:8888/', function(data) {
-		console.log(data);	
+function mark_as_read(message_id) {
+	$.get("http://localhost:8888/flag", {"id": message_id}).error(function(data) {
+		console.log("Unable to mark " + message_id + " as read.");
 	});
+}
+
+function load_messages() {
+	// Fetches the messages from the server
+	$.getJSON("http://localhost:8888/getall", function(messages) {
+		$.each(messages, function(i, message) {
+			add_message_element(message.message, message._id, message.read);
+		});
+	});
+}
+
+$(document).ready(function() {
+	load_messages();
 
 	$("textarea[name=message]").focus(function() {
 		if($(this).hasClass("placeholder")) {
@@ -140,6 +167,7 @@ $(document).ready(function() {
 	});
 
 	$(document).on("click", ".message.unread", function() {
+		mark_as_read($(this).attr("data-message-id"));
 		$(this).removeClass("unread");
 	});
 });

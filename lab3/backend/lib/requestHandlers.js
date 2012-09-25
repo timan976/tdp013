@@ -1,6 +1,7 @@
 var mongo = require('mongodb');
 var mongo_server = new mongo.Server('localhost', 27017);
 var db = new mongo.Db('tdp013', mongo_server);
+var util = require('util');
 
 // Open a connection to the database
 db.open(function(err, db) {
@@ -40,6 +41,8 @@ function save_message(req, res) {
 				res.write("500 Internal Server Error");
 			} else {
 				res.writeHead(200);
+				var resp = JSON.stringify(result[0]);
+				res.write(resp);
 			}
 			res.end();
 		});
