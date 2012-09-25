@@ -1,15 +1,11 @@
 var mongo = require('mongodb');
-var mongo_server = new mongo.Server('localhost', 27017);
-var db = new mongo.Db('tdp013', mongo_server);
-
-// Open a connection to the database
-db.open(function(err, db) {
-	if(err) {
-		console.log("Error connecting to database:\n" + err);
-	}
-});
 
 var url = require('url');
+var db;
+
+function set_database(new_db) {
+	db = new_db;
+}
 
 function index(req, res) {
 	res.writeHead(200, {'Content-Type': 'text/html'});
@@ -59,8 +55,6 @@ function flag_message(req, res) {
 	db.collection("message", function(e, c) {
 		c.update({_id: msg_id}, {$set: {read: true}}, function(find_err, msg_doc) {
 			if(find_err) {
-				console.log(find_err);
-				console.log(msg_doc);
 				res.writeHead(500, {'Content-Type': 'text/html'});
 				res.write("500 Internal Server Error");
 			} else {
@@ -90,3 +84,4 @@ exports.index = index;
 exports.save_message = save_message;
 exports.flag_message = flag_message;
 exports.messages = messages;
+exports.set_database = set_database;

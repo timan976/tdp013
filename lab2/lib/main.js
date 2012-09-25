@@ -9,4 +9,6 @@ var handlers = {
 	'/getall': {'method': 'GET', 'callback': requestHandlers.messages}
 };
 
-server.start(router.route, handlers);
+server.start(router.route, handlers, function(db) {
+	requestHandlers.set_database(db);
+});
